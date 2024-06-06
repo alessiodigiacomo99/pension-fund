@@ -1,4 +1,4 @@
-package com.app.demo;
+package com.app.pensionFund;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
