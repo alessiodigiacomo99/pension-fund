@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class PensionFundDTO {
 
     private Long idPensionFund;
+    private String company;
+    private String fundName;
 }

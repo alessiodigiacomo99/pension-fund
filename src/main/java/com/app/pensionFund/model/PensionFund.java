@@ -15,5 +15,11 @@ public class PensionFund {
     @Id
     @Column(name = "id_pension_fund", nullable = false, unique = true)
     private Long idPensionFund;
+
+    @Column(name = "company", nullable = false)
+    private String company;
+
+    @Column(name = "fund_name", nullable = false)
+    private String fundName;
 }
 
