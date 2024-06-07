@@ -1,15 +1,13 @@
 package com.app.pensionFund.controller;
 
 import com.app.pensionFund.business.PensionFundBusiness;
+import com.app.pensionFund.dto.InvestmentLineDTO;
 import com.app.pensionFund.dto.PensionFundDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,7 +22,12 @@ public class PensionFundController {
 
 
     @GetMapping(path = "/get-all", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<PensionFundDTO>> getAllPensionFunds() throws Exception {
+    public ResponseEntity<List<PensionFundDTO>> getAllPensionFunds() {
         return ResponseEntity.ok(pensionFundBusiness.getAllPensionFunds());
+    }
+
+    @GetMapping(path = "/get-investment-line-by-pension-fund/{idPensionFund}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<List<InvestmentLineDTO>> getInvestmentLineByPensionFund(@PathVariable Long idPensionFund){
+        return ResponseEntity.ok(pensionFundBusiness.getInvestmentLineByPensionFund(idPensionFund));
     }
 }

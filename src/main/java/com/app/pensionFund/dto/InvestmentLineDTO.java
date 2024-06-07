@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PensionFundDTO {
+public class InvestmentLineDTO extends PensionFundDTO{
 
-    private String fundName;
-    private String companyName;
+    private String investmentLineName;
 }
