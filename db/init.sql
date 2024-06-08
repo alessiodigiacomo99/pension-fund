@@ -14,9 +14,14 @@ create table investment_line (
     id_investment_line serial primary key,
     id_pension_fund int4 NOT NULL,
     investment_line_name varchar(20) NOT NULL,
+    stock_percentage decimal(4, 2) NULL,
+    bond_percentage decimal(4, 2) NULL,
+    commodity_percentage decimal(4, 2) NULL,
+    liquidity_percentage decimal(4, 2) NULL,
+    other decimal(4, 2) NULL,
     CONSTRAINT fkid_pension_fund FOREIGN KEY (id_pension_fund) REFERENCES pension_fund(id_pension_fund)
 );
 
 insert into company(id_company, company_name) values (1, 'allianz');
 insert into pension_fund(id_pension_fund, id_company, fund_name) values (1, 1, 'insieme');
-insert into investment_line(id_investment_line, id_pension_fund, investment_line_name) values (1, 1, 'espansione');
+insert into investment_line(id_investment_line, id_pension_fund, investment_line_name, stock_percentage, liquidity_percentage) values (1, 1, 'espansione', 95.00, 5.00);

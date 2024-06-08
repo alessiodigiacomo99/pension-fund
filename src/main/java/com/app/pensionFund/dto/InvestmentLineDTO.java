@@ -10,4 +10,9 @@ import lombok.NoArgsConstructor;
 public class InvestmentLineDTO extends PensionFundDTO{
 
     private String investmentLineName;
+    private String stockPercentage;
+    private String bondPercentage;
+    private String commodityPercentage;
+    private String liquidityPercentage;
+    private String other;
 }
