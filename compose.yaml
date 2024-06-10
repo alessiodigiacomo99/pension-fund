@@ -1,10 +1,39 @@
-version: '3'
+version: '3.8'
 services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - mynet
+    restart: on-failure
+    env_file: ./.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+      "spring.application.name":"pension_fund",
+      "spring.profiles.active":"dev",
+      "spring.jpa.properties.hibernate.dialect":"org.hibernate.dialect.PostgreSQLDialect",
+      "spring.jpa.hibernate.ddl-auto":"none",
+      "spring.datasource.type":"com.zaxxer.hikari.HikariDataSource",
+      "spring.datasource.driver-class-name":"org.postgresql.Driver",
+      "spring.datasource.url":"jdbc:postgresql://postgres:5432/$POSTGRESDB_DB",
+      "spring.datasource.password":"$POSTGRES_PASSWORD",
+      "spring.datasource.username":"$POSTGRES_USER",
+      "spring.jackson.serialization.FAIL_ON_EMPTY_BEANS":"false"
+      }'
   postgres:
     build: ./db
+    restart: always
+    env_file: ./.env
     environment:
-      - 'POSTGRES_DB=pension_fund'
-      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_DB=$POSTGRESDB_DB'
+      - 'POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
     ports:
       - '5432:5432'
-
+    networks:
+      - mynet
+networks:
+  mynet:
+    driver: bridge
