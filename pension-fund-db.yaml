@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pension-fund-db
+  labels:
+    app: pension-fund-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pension-fund-db
+  template:
+    metadata:
+      labels:
+        app: pension-fund-db
+        tier: database
+    spec:
+      containers:
+      - name: pension-fund-db
+        image: alessiodg99/app-db:latest
+        ports:
+        - containerPort: 5432
+          name: pension-fund-db
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-db
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pension-fund-db
+  labels:
+    app: pension-fund-db
+    tier: database
+spec:
+  selector:
+    app: pension-fund-db
+    tier: database
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5432

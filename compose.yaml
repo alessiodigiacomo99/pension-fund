@@ -3,7 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "8000:8000"
+      - "8080:8000"
     depends_on:
       - postgres
     networks:
@@ -18,7 +18,7 @@ services:
       "spring.jpa.hibernate.ddl-auto":"none",
       "spring.datasource.type":"com.zaxxer.hikari.HikariDataSource",
       "spring.datasource.driver-class-name":"org.postgresql.Driver",
-      "spring.datasource.url":"jdbc:postgresql://postgres:5432/$POSTGRESDB_DB",
+      "spring.datasource.url":"jdbc:postgresql://$DB_HOST:5432/$DB_NAME",
       "spring.datasource.password":"$POSTGRES_PASSWORD",
       "spring.datasource.username":"$POSTGRES_USER",
       "spring.jackson.serialization.FAIL_ON_EMPTY_BEANS":"false"
@@ -28,7 +28,7 @@ services:
     restart: always
     env_file: ./.env
     environment:
-      - 'POSTGRES_DB=$POSTGRESDB_DB'
+      - 'POSTGRES_DB=$DB_NAME'
       - 'POSTGRES_PASSWORD=$POSTGRES_PASSWORD'
     ports:
       - '5432:5432'

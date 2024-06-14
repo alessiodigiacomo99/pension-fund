@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pension-fund-app
+  labels:
+    app: pension-fund-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pension-fund-app
+  template:
+    metadata:
+      labels:
+        app: pension-fund-app
+    spec:
+      containers:
+      - name: pension-fund-app
+        image: alessiodg99/app-web:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-password
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-user
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-db
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: config-map
+              key: postgres-name
+        - name: DB_HOST
+          value: pension-fund-db
+        - name: SPRING_APPLICATION_JSON
+          value: '{
+                    "spring.application.name":"pension_fund",
+                    "spring.profiles.active":"dev",
+                    "spring.jpa.properties.hibernate.dialect":"org.hibernate.dialect.PostgreSQLDialect",
+                    "spring.jpa.hibernate.ddl-auto":"none",
+                    "spring.datasource.type":"com.zaxxer.hikari.HikariDataSource",
+                    "spring.datasource.hikari.connection-timeout":"600000",
+                    "spring.datasource.driver-class-name":"org.postgresql.Driver",
+                    "spring.datasource.url":"jdbc:postgresql://pension-fund-db:5432/${POSTGRES_DB}",
+                    "spring.datasource.password":"${POSTGRES_PASSWORD}",
+                    "spring.datasource.username":"${POSTGRES_USER}",
+                    "spring.jackson.serialization.FAIL_ON_EMPTY_BEANS":"false"
+                    }'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pension-fund-app
+  labels:
+    name: pension-fund-app
+spec:
+  type: NodePort
+  selector:
+    app: pension-fund-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000
